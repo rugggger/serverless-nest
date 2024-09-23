@@ -11,6 +11,17 @@ Globals:
     Timeout: 3
 
 Resources:
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: 'DocukeepApi'
+      StageName: Test
+      Cors:
+        AllowMethods: "'OPTIONS,GET,POST,PUT,DELETE'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+      EndpointConfiguration: REGIONAL
+
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -20,11 +31,25 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
+        ProxyApiEvent:
           Type: Api
           Properties:
-            Path: /v1/hello
-            Method: get
+            RestApiId: !Ref ApiGateway
+            Path: /{proxy+}
+            Method: ANY
+        RootApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /
+            Method: ANY
+
+      # Events:
+      #   HelloWorld:
+      #     Type: Api
+      #     Properties:
+      #       Path: /v1/hello
+      #       Method: get
     Metadata:
       DockerTag: nodejs20.x-v1
       DockerContext: ./
