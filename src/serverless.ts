@@ -5,6 +5,7 @@ import { Context, Handler } from 'aws-lambda';
 import express from 'express';
 
 import { AppModule } from './app.module';
+import { AuthPipe } from './pipes/AuthPipe';
 
 let cachedServer: Handler;
 
@@ -16,6 +17,7 @@ async function bootstrap() {
       new ExpressAdapter(expressApp),
     );
 
+    nestApp.useGlobalPipes(new AuthPipe())
     nestApp.enableCors();
 
     await nestApp.init();
