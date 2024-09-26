@@ -4,7 +4,12 @@ Description: >
   sam-docker-node
 
   Sample SAM Template for sam-docker-node
-  
+
+Parameters:
+  CognitoUserPoolArn:
+    Type: String
+    Default: arn:aws:cognito-idp:eu-west-1:xxxx
+    Description: "cognito user pool"
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
@@ -16,6 +21,14 @@ Resources:
     Properties:
       Name: 'CognitoTest'
       StageName: Test
+      Auth:
+        DefaultAuthorizer: MyCognitoAuthorizer
+        Authorizers:
+          MyCognitoAuthorizer:
+            UserPoolArn: !Ref CognitoUserPoolArn
+            Identity:
+              Header: Authorization  # Where the access token is passed
+
       Cors:
         AllowMethods: "'OPTIONS,GET,POST,PUT,DELETE'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -43,6 +56,8 @@ Resources:
             RestApiId: !Ref ApiGateway
             Path: /
             Method: ANY
+            Auth:
+              Authorizer: NONE 
 
       # Events:
       #   HelloWorld:

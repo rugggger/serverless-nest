@@ -19,6 +19,8 @@ s3_bucket = "sam-learn-lambda-12345"
 s3_prefix = "sam-learn-lambda"
 region = "eu-west-1"
 resolve_image_repos = true
+parameter_overrides = "CognitoUserPoolArn=\"arn:aws:cognito-idp:eu-west-1:203918888758:userpool/eu-west-1_wdX1z5e3m\""
+
 
 [default.package.parameters]
 resolve_s3 = true
