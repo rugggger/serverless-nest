@@ -19,4 +19,9 @@ export class AppController {
   getHelloV2(): string {
     return this.appService.getHello() + ' v2';
   }
+
+  @Get('v2/unprotected/hello')
+  getHelloV2Unprotected(): string {
+    return this.appService.getHello() + ' unprotected route v2';
+  }
 }

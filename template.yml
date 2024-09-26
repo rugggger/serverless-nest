@@ -50,6 +50,14 @@ Resources:
             RestApiId: !Ref ApiGateway
             Path: /{proxy+}
             Method: ANY
+        ExcludedAuthPath:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /v2/unprotected/hello
+            Method: ANY
+            Auth:
+              Authorizer: NONE 
         RootApiEvent:
           Type: Api
           Properties:
