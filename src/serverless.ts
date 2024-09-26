@@ -27,8 +27,7 @@ async function bootstrap() {
 }
 
 export const handler = async (event: any, context: Context, callback: any) => {
-  console.log('[serverless2] event', event, 'context', context)
-  console.log('[serverless2] start ', process.env)
+  console.log('[serverless] claims', event?.requestContext?.authorizer?.claims)
   const server = await bootstrap();
   return server(event, context, callback);
 };
