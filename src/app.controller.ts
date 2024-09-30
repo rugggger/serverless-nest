@@ -1,9 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Req, UsePipes } from '@nestjs/common';
 import { AppService } from './app.service';
+
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) { }
 
   @Get()
   getHello(): string {
@@ -16,7 +17,24 @@ export class AppController {
   }
 
   @Get('v2/hello')
-  getHelloV2(): string {
-    return this.appService.getHello() + ' v2';
+  getHelloV2(
+    @Req() req,
+    @Body() body
+  ) {
+    return {
+      message: this.appService.getHello() + ' v2',
+      body,
+    }
+  }
+
+  @Get('v2/unprotected/hello')
+  getHelloV2Unprotected(
+    @Req() req,
+    @Body() body
+  ) {
+    return {
+      message: this.appService.getHello() + 'unprotected v2',
+      body,
+    }
   }
 }

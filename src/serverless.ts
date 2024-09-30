@@ -5,6 +5,7 @@ import { Context, Handler } from 'aws-lambda';
 import express from 'express';
 
 import { AppModule } from './app.module';
+import { AuthPipe } from './pipes/AuthPipe';
 
 let cachedServer: Handler;
 
@@ -16,6 +17,7 @@ async function bootstrap() {
       new ExpressAdapter(expressApp),
     );
 
+    nestApp.useGlobalPipes(new AuthPipe())
     nestApp.enableCors();
 
     await nestApp.init();
@@ -27,8 +29,7 @@ async function bootstrap() {
 }
 
 export const handler = async (event: any, context: Context, callback: any) => {
-  console.log('[serverless2] event', event, 'context', context)
-  console.log('[serverless2] start ', process.env)
+  console.log('[serverless] claims', event?.requestContext?.authorizer?.claims)
   const server = await bootstrap();
   return server(event, context, callback);
 };
